@@ -3,7 +3,7 @@ pipeline {
     environment {
         registry = "sharathdb/python-project" //To push an image to Docker Hub, you must first name your local image using your Docker Hub username and the repository name that you created through Docker Hub on the web.
         registryCredential = 'qwerty@123456'
-        githubCredential = 'SharathDB@1605'
+        githubCredential = 'GITHUB'
         dockerImage = ''
     }
     agent any
