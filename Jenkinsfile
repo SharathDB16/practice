@@ -32,7 +32,7 @@ pipeline {
 
         stage ('Test'){
                 steps {
-                sh "pytest testRoutes.py"
+                sh "python3 -m pytest testRoutes.py"
                 }
         }
 
