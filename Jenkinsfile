@@ -17,7 +17,13 @@ pipeline {
                 }
         }
         
-       stage ('Test'){
+       stage ('Install Dependencies'){
+                steps {
+                sh "pip install -r requirements.txt"
+                }
+        }
+
+        stage ('Test'){
                 steps {
                 sh "pytest testRoutes.py"
                 }
