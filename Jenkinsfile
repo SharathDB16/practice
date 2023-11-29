@@ -1,20 +1,61 @@
+def img
 pipeline {
+    environment {
+        registry = "sharathdb/python-project" //To push an image to Docker Hub, you must first name your local image using your Docker Hub username and the repository name that you created through Docker Hub on the web.
+        registryCredential = 'qwerty@123456'
+        githubCredential = 'SharathDB@1605'
+        dockerImage = ''
+    }
     agent any
     stages {
-        stage("Stage 1"){
-            steps {
-                echo "This is stage 1"
+        
+        stage('checkout') {
+                steps {
+                git branch: 'master',
+                credentialsId: githubCredential,
+                url: 'https://github.com/SharathDB16/practice.git'
+                }
+        }
+        
+        stage ('Test'){
+                steps {
+                sh "pytest testRoutes.py"
+                }
+        }
+        
+        stage ('Clean Up'){
+            steps{
+                sh returnStatus: true, script: 'docker stop $(docker ps -a | grep ${JOB_NAME} | awk \'{print $1}\')'
+                sh returnStatus: true, script: 'docker rmi $(docker images | grep ${registry} | awk \'{print $3}\') --force' //this will delete all images
+                sh returnStatus: true, script: 'docker rm ${JOB_NAME}'
             }
         }
-        stage("Stage 2"){
+
+        stage('Build Image') {
             steps {
-                echo "This is stage 2"
+                script {
+                    img = registry + ":${env.BUILD_ID}"
+                    println ("${img}")
+                    dockerImage = docker.build("${img}")
+                }
             }
         }
-        stage("Stage 3"){
+
+        stage('Push To DockerHub') {
             steps {
-                echo "This is stage 3"
+                script {
+                    docker.withRegistry( 'https://registry.hub.docker.com ', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
             }
         }
+                    
+        stage('Deploy') {
+           steps {
+                sh label: '', script: "docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}"
+          }
+        }
+
+      }
     }
-}
