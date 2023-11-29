@@ -16,12 +16,6 @@ pipeline {
                 url: 'https://github.com/SharathDB16/practice.git'
                 }
         }
-
-        stage ('Test'){
-                steps {
-                sh "pytest testRoutes.py"
-                }
-        }
         
         stage ('Clean Up'){
             steps{
@@ -30,7 +24,7 @@ pipeline {
                 sh returnStatus: true, script: 'docker rm ${JOB_NAME}'
             }
         }
-        
+
         stage('Build Image') {
             steps {
                 script {
@@ -39,6 +33,12 @@ pipeline {
                     dockerImage = docker.build("${img}")
                 }
             }
+        }
+
+        stage ('Test'){
+                steps {
+                sh "pytest testRoutes.py"
+                }
         }
 
         stage('Push To DockerHub') {
