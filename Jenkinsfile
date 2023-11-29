@@ -20,10 +20,6 @@ pipeline {
         stage('Setup') {
             steps {
                 script {
-                    // Install Python 3 and pip
-                    sh 'sudo apt-get update'
-                    sh 'sudo apt-get install -y python3 python3-venv python3-pip'
-
                     // Create and activate a virtual environment
                     sh 'python3 -m venv venv'
                     sh '. venv/bin/activate'
