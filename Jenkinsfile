@@ -22,7 +22,7 @@ pipeline {
                 script {
                     // Create and activate a virtual environment
                     sh 'python3 -m venv venv'
-                    sh 'source venv/bin/activate'
+                    sh '. venv/bin/activate'
                     
                     // Install dependencies
                     sh 'pip install -r requirements.txt'  // If you have a requirements.txt file
