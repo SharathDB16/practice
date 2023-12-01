@@ -5,7 +5,7 @@ pipeline {
         registryCredential = 'DOCKERHUB'
         githubCredential = 'GITHUB'
         dockerImage = ''
-        sonarqubeScannerHome = tool 'sonarqube-scanner'
+        sonarqubeScannerHome = tool 'sonar'
     }
     agent any
     stages {
