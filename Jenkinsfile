@@ -5,6 +5,7 @@ pipeline {
         registryCredential = 'DOCKERHUB'
         githubCredential = 'GITHUB'
         dockerImage = ''
+        sonarqubeScannerHome = tool 'sonarqube-scanner'
     }
     agent any
     stages {
@@ -59,6 +60,16 @@ pipeline {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         docker.image("${img}").push()
+                    }
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonarqube') {
+                        sh "${sonarqubeScannerHome}/bin/sonar-scanner"
                     }
                 }
             }
