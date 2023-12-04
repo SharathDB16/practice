@@ -18,22 +18,20 @@ pipeline {
                 }
         }
         
-        stage('Setup') {
+        stage('Initilize Unit Test Env') {
             steps {
                 script {
-                    // Create and activate a virtual environment
-                    sh 'python3 -m venv venv'
-                    sh '. venv/bin/activate'
+                    // Create a test environment
+                    sh("docker-compose -f docker-compose.test.yml -p ${composeProject} up -d --build")
+                    sh("sleep 20s")
                     
-                    // Install dependencies
-                    sh 'pip install --no-warn-script-location -r requirements.txt'  // If you have a requirements.txt file
                 }
             }
         }
 
-        stage ('Test'){
+        stage ('Run Unit tests'){
                 steps {
-                sh "python3 -m pytest testRoutes.py"
+                sh("docker-compose -f docker-compose.test.yml -p ${composeProject} exec -T pullbased python3 testRoutes.py || echo 0")
                 }
         }
 

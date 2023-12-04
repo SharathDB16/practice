@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  pullbased:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: >
+      sh -c "python3 -m pytest testRoutes.py"
+    environment:
+      - NODE_ENV=docker
+
+networks:
+  default:
+    external:
+      name: dockersubnet
