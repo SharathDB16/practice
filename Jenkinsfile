@@ -6,7 +6,7 @@ pipeline {
         githubCredential = 'GITHUB'
         dockerImage = ''
         sonarqubeScannerHome = tool 'sonar'
-        composeProject = pullbasedmaster
+        composeProject = 'pullbasedmaster'
     }
     agent any
     stages {
